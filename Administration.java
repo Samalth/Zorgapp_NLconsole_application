@@ -3,7 +3,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.Scanner;
 
-class Administration {
+class Administration  {
     static final int Stop = 0;
     static final int Switch_User = 1;
     static final int Switch_Patient = 2;
