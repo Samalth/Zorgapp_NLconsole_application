@@ -3,12 +3,12 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.Scanner;
 
+
 class Administration {
     static final int Stop = 0;
     static final int Switch_User = 1;
     static final int Switch_Patient = 2;
     static final int VIEW = 3;
-
 
     Patient currentPatient;          // Huidige patient zichtbaar in 'int currentpatientindex = 0;'.
     User currentUser;               // Huidige Gebruiker
@@ -39,23 +39,45 @@ class Administration {
      */
     ArrayList<User> users = new ArrayList<>();
 
+    boolean switchUser(int newUserId) {
+        for (User user : users) {
+            if (user.getUserID() == newUserId) {
+                currentUser = user;
+                return true;
+            }
+        }
+        return false;
+    }
+
     void addUser(String userName) {
         int userId = users.size(); // Gebruik de grootte van de lijst als de nieuwe gebruikers-ID
         User user = new User(userId, userName);
         users.add(user);
     }
 
+    void listUsers() {
+        System.out.println("Lijst van alle gebruikers:");
+        for (User user : users) {
+            System.out.format("ID: [%d] %s\n", user.getUserID(), user.getUserName());
+        }
+    }
 
     void listPatients() {
         System.out.println("Lijst van alle patiënten:");
         for (Patient patient : patients) {
             int age = calculateAge(patient.getDateOfBirth());
-            System.out.format("[%d] %s, %s (%d jaar oud)\n", patient.id, patient.getSurname(), patient.getFirstName(), age);
+            System.out.format("ID: [%d] %s, %s (%d jaar oud)\n", patient.id, patient.getSurname(), patient.getFirstName(), age);
         }
     }
 
 
     void editData() {
+        System.out.println(" ");
+        System.out.println("===============");
+        System.out.println("====SUBMENU====");
+        System.out.println("===============");
+        System.out.println(" ");
+
         System.out.println("Bewerk patiëntgegevens:");
         System.out.println("1:  Bewerk naam");
         System.out.println("2:  Bewerk geboortedatum");
@@ -132,6 +154,7 @@ class Administration {
             System.out.println("===============");
             System.out.println("===HOOFDMENU===");
             System.out.println("===============");
+            System.out.println(" ");
             System.out.println(" ");
             System.out.format("Huidige patiënt: %s (%d jaar oud)\n", currentPatient.fullName(), calculateAge(currentPatient.getDateOfBirth()));
 
@@ -213,6 +236,12 @@ class Administration {
                 }
 
                 case VIEW -> {
+                    System.out.println(" ");
+                    System.out.println("===============");
+                    System.out.println("====SUBMENU====");
+                    System.out.println("===============");
+                    System.out.println(" ");
+
                     System.out.println("Bekijk de data van de huidige patiënt:");
                     System.out.println("1:  Toon patiëntgegevens");
                     System.out.println("2:  Bewerk patiëntgegevens");
