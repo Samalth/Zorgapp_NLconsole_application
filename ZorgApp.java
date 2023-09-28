@@ -11,6 +11,8 @@
             administration.addUser("Huisarts Bob Metselaar");
             administration.addUser("Tandarts Jabba de Hut");
             administration.addUser("Apotheker Dirk Kat");
+            administration.addUser("Dr Hans Camora");
+
 
             //Laat de lijst van gebruikers zien voor laten zien van hoofdmenu
             administration.listUsers();
@@ -21,15 +23,22 @@
             while (!userSwitched) {
                 System.out.print("Kies een gebruiker om naar te wisselen (gebruikers-ID): ");
                 Scanner scanner = new Scanner(System.in);
-                int switchUserId = scanner.nextInt();
 
-                if (administration.switchUser(switchUserId)) {
-                    userSwitched = true;
-                    System.out.println("Gewisseld naar gebruiker: " + administration.currentUser.getUserName());
-                } else {
-                    System.out.println("Ongeldige gebruikers-ID. Probeer opnieuw.");
+                try {
+                    int switchUserId = scanner.nextInt();
+
+                    if (administration.switchUser(switchUserId)) {
+                        userSwitched = true;
+                        System.out.println("Gewisseld naar gebruiker: " + administration.currentUser.getUserName());
+                    } else {
+                        System.out.println("Ongeldige gebruikers-ID. Probeer opnieuw.");
+                    }
+                } catch (InputMismatchException e) {
+                    System.out.println("Ongeldige invoer. Voer een geldig geheel getal in voor de gebruikers-ID.");
+                    scanner.next(); // Schoonmaak v scanner om foute invoer te wissen
                 }
             }
+
 
             //Nu het hoofdmenu
             administration.menu();

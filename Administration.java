@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Scanner;
-
+import java.util.*;
 
 class Administration {
     static final int Stop = 0;
@@ -32,7 +32,6 @@ class Administration {
         patients.add(new Patient(10, "Zeukel", "Mohammed", LocalDate.of(1983, 3, 30), 1.80, 80.0));
 
         currentPatient = patients.get(currentPatientIndex);
-        System.out.format("Huidige gebruiker: [%d] %s\n", user.getUserID(), user.getUserName());
     }
     /**
      * Wat ik hierboven heb gedaan met de patiënten ga ik proberen hieronder met Users
@@ -155,6 +154,7 @@ class Administration {
             System.out.println("===HOOFDMENU===");
             System.out.println("===============");
             System.out.println(" ");
+            System.out.format("Huidige gebruiker: [%d] %s\n", currentUser.getUserID(), currentUser.getUserName());
             System.out.println(" ");
             System.out.format("Huidige patiënt: %s (%d jaar oud)\n", currentPatient.fullName(), calculateAge(currentPatient.getDateOfBirth()));
 
