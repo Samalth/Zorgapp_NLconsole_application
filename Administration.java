@@ -10,8 +10,8 @@ class Administration {
     static final int Switch_Patient = 2;
     static final int VIEW = 3;
 
-    Patient currentPatient;          // Huidige patient zichtbaar in 'int currentpatientindex = 0;'.
-    User currentUser;               // Huidige Gebruiker
+    Patient currentPatient;
+    User currentUser;
 
     ArrayList<Patient> patients = new ArrayList<>();
     int currentPatientIndex = 0;
@@ -49,7 +49,7 @@ class Administration {
     }
 
     void addUser(String userName) {
-        int userId = users.size(); // Gebruik de grootte van de lijst als de nieuwe gebruikers-ID
+        int userId = users.size();
         User user = new User(userId, userName);
         users.add(user);
     }
@@ -71,6 +71,7 @@ class Administration {
 
 
     void editData() {
+        System.out.println("=================================================");
         System.out.println(" ");
         System.out.println("===============");
         System.out.println("====SUBMENU====");
@@ -108,7 +109,7 @@ class Administration {
             }
             case 2 -> {
                 System.out.print("Voer de nieuwe geboortedatum in (YYYY-MM-DD): ");
-                String newBirthDateStr = scanner.nextLine().trim(); // Trim de invoer
+                String newBirthDateStr = scanner.nextLine().trim();
                 LocalDate newBirthDate = LocalDate.parse(newBirthDateStr);
                 currentPatient.setDateOfBirth(newBirthDate);
                 System.out.println("Geboortedatum bijgewerkt naar: " + newBirthDateStr);
@@ -116,7 +117,7 @@ class Administration {
             case 3 -> { // Bewerk lengte
                 System.out.print("Voer de nieuwe lengte in (bijv. 1.75): ");
                 String heightInput = scanner.nextLine();
-                heightInput = heightInput.replace(",", "."); // Vervang komma door punt
+                heightInput = heightInput.replace(",", ".");
                 double newHeight;
                 try {
                     newHeight = Double.parseDouble(heightInput);
@@ -143,7 +144,7 @@ class Administration {
     }
 
 
-    void menu() { // HOOFDMENU!
+    void menu() {
         var scanner = new Scanner(System.in);
 
         boolean nextCycle = true;
@@ -167,12 +168,12 @@ class Administration {
 
             System.out.print("Maak een keuze: ");
 
-            // Voegt inputvalidatie toe voor als er geen heel getal wordt ingevuld
+
             int choice;
             while (true) {
                 try {
                     choice = Integer.parseInt(scanner.nextLine());
-                    break; // Dit stopt mijn loop als het goed is ingevuld
+                    break;
                 } catch (NumberFormatException e) {
                     System.out.println("Geen geldige keuze, voer alstublieft een *geldig* getal in");
                     System.out.print("Maak een keuze: ");
@@ -180,19 +181,19 @@ class Administration {
             }
 
             switch (choice) {
-                case Stop -> // interrupt the loop
+                case Stop ->
                         nextCycle = false;
 
                 case Switch_Patient -> {
-                    listPatients(); // Laat de lijst met patiënten zien wanneer je naar een andere patiënt overschakelt
+                    listPatients();
                     System.out.print("Vul gebruikers ID in om te wisselen: ");
 
-                    // Voegt inputvalidatie toe voor als er geen heel getal wordt ingevuld
+
                     int newIndex;
                     while (true) {
                         try {
                             newIndex = Integer.parseInt(scanner.nextLine());
-                            break; // Dit stopt mijn loop als het goed is ingevuld
+                            break;
                         } catch (NumberFormatException e) {
                             System.out.println("Geen geldig patiënt ID");
                             System.out.print("Vul gebruikers ID in om te wisselen: ");
@@ -215,12 +216,12 @@ class Administration {
                     }
                     System.out.print("Vul gebruikers ID in om te wisselen: ");
 
-                    // Voegt inputvalidatie toe voor als er geen heel getal wordt ingevuld
+
                     int newIndex;
                     while (true) {
                         try {
                             newIndex = Integer.parseInt(scanner.nextLine());
-                            break; // Dit stopt mijn loop als het goed is ingevuld
+                            break;
                         } catch (NumberFormatException e) {
                             System.out.println("Voer alstublieft een *geldig* getal in");
                             System.out.print("Vul gebruikers ID in om te wisselen: ");
@@ -237,22 +238,18 @@ class Administration {
 
                 case VIEW -> {
                     System.out.println(" ");
-                    System.out.println("===============");
-                    System.out.println("====SUBMENU====");
-                    System.out.println("===============");
+                    currentPatient.viewData();
+                    System.out.println("=================================================");
                     System.out.println(" ");
-
-                    System.out.println("Bekijk de data van de huidige patiënt:");
-                    System.out.println("1:  Toon patiëntgegevens");
-                    System.out.println("2:  Bewerk patiëntgegevens");
-                    System.out.println("0:  Terug naar hoofdmenu");
-
+                    System.out.println("1: Bewerk patiëntgegevens");
+                    System.out.println("0: Terug naar hoofdmenu");
+                    System.out.println(" ");
                     System.out.print("Maak een keuze: ");
 
-                    int viewChoice;
+                    int editChoice;
                     while (true) {
                         try {
-                            viewChoice = Integer.parseInt(scanner.nextLine());
+                            editChoice = Integer.parseInt(scanner.nextLine());
                             break;
                         } catch (NumberFormatException e) {
                             System.out.println("Geen geldige keuze, voer alstublieft een *geldig* getal in");
@@ -260,12 +257,12 @@ class Administration {
                         }
                     }
 
-                    switch (viewChoice) {
-                        case 1 -> currentPatient.viewData();
-                        case 2 -> editData(); // Je kunt de bewerkingsfunctie hieraan koppelen
+                    switch (editChoice) {
+                        case 1 -> editData();
                         case 0 -> System.out.println("Terug naar hoofdmenu.");
                         default -> System.out.println("Ongeldige keuze.");
                     }
+
                 }
 
                 default -> System.out.println("Voer alstublieft een *geldig* getal in");
@@ -273,7 +270,7 @@ class Administration {
         }
     }
 
-    int calculateAge(LocalDate birthDate) { //leeftijd berekenen
+    int calculateAge(LocalDate birthDate) {
         LocalDate currentDate = LocalDate.now();
         Period period = Period.between(birthDate, currentDate);
         return period.getYears();

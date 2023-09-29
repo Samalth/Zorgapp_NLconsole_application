@@ -72,7 +72,7 @@ double weight;
         System.out.format("%-17s %s\n", "Achternaam:", surname);
         System.out.format("%-17s %s\n", "Voornaam:", firstName);
         System.out.format("%-17s %s\n", "Geboortedatum:", dateOfBirth);
-        System.out.format("%-17s %.2f meter\n", "Lengte:", height);
+        System.out.format("%-17s %.2f m\n", "Lengte:", height);
         System.out.format("%-17s %.2f kg\n", "Gewicht:", weight);
         System.out.format("%-17s %.2f kg/m2\n", "BMI:", calculateBMI());
     }

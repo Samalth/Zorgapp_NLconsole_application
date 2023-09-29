@@ -3,7 +3,7 @@
  class ZorgApp {
         public static void main(String[] args) {
             System.out.println(" ");
-            User user = new User(4, "Dr. Hans Camora"); //Maak een gebruiker aan
+            User user = new User(4, "Dr. Melvin Bos"); //Maak een gebruiker aan
             Administration administration = new Administration(user);
 
             //Voeg nieuwe gebruikers toe
@@ -11,10 +11,9 @@
             administration.addUser("Huisarts Bob Metselaar");
             administration.addUser("Tandarts Jabba de Hut");
             administration.addUser("Apotheker Dirk Kat");
-            administration.addUser("Dr Hans Camora");
+            administration.addUser("Dr Melvin Bos");
 
 
-            //Laat de lijst van gebruikers zien voor laten zien van hoofdmenu
             administration.listUsers();
 
 
@@ -40,7 +39,6 @@
             }
 
 
-            //Nu het hoofdmenu
             administration.menu();
         }
  }
