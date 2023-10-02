@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.time.Period;
 import java.util.Scanner;
 import java.util.*;
@@ -107,13 +109,20 @@ class Administration {
                 currentPatient.setFirstName(newName);
                 System.out.println("Naam bijgewerkt naar: " + newName);
             }
+
             case 2 -> {
-                System.out.print("Voer de nieuwe geboortedatum in (YYYY-MM-DD): ");
+                System.out.print("Voer de nieuwe geboortedatum in (dd-MM-yyyy): ");
                 String newBirthDateStr = scanner.nextLine().trim();
-                LocalDate newBirthDate = LocalDate.parse(newBirthDateStr);
-                currentPatient.setDateOfBirth(newBirthDate);
-                System.out.println("Geboortedatum bijgewerkt naar: " + newBirthDateStr);
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                try {
+                    LocalDate newBirthDate = LocalDate.parse(newBirthDateStr, formatter);
+                    currentPatient.setDateOfBirth(newBirthDate);
+                    System.out.println("Geboortedatum bijgewerkt naar: " + newBirthDate.format(formatter));
+                } catch (DateTimeParseException e) {
+                    System.out.println("Ongeldige datum. Voer een geldige datum in (dd-MM-yyyy).");
+                }
             }
+
             case 3 -> { // Bewerk lengte
                 System.out.print("Voer de nieuwe lengte in (bijv. 1.75): ");
                 String heightInput = scanner.nextLine();
@@ -127,6 +136,7 @@ class Administration {
                     System.out.println("Ongeldige lengte. Voer een geldig getal in (bijv. 1.75).");
                 }
             }
+
             case 4 -> {
                 System.out.print("Voer het nieuwe gewicht in (bijv. 75.0): ");
                 double newWeight;
@@ -157,7 +167,8 @@ class Administration {
             System.out.println(" ");
             System.out.format("Huidige gebruiker: [%d] %s\n", currentUser.getUserID(), currentUser.getUserName());
             System.out.println(" ");
-            System.out.format("Huidige patiënt: %s (%d jaar oud)\n", currentPatient.fullName(), calculateAge(currentPatient.getDateOfBirth()));
+            System.out.format("Huidige patiënt: %s [%s]\n", currentPatient.fullName(), currentPatient.getDateOfBirth().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+
 
 
             System.out.format("%d:  Stop\n", Stop);

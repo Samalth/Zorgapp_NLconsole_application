@@ -2,6 +2,7 @@
 
  class ZorgApp {
         public static void main(String[] args) {
+            System.out.println("=================================================");
             System.out.println(" ");
             User user = new User(4, "Dr. Melvin Bos"); //Maak een gebruiker aan
             Administration administration = new Administration(user);
