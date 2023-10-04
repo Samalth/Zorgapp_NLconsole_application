@@ -1,4 +1,5 @@
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
@@ -74,7 +75,8 @@ double weight;
         System.out.format("%-17s %s\n", "Achternaam:", surname);
         System.out.format("%-17s %s\n", "Voornaam:", firstName);
         System.out.format("%-17s %s\n", "Geboortedatum:", dateOfBirth.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
-        System.out.format("%-17s %.2f m\n", "Lengte:", height);
+        System.out.format("%-17s %d jaar\n", "Leeftijd:", calculateAge(dateOfBirth));
+        System.out.format("%-17s %.2f  m\n", "Lengte:", height);
         System.out.format("%-17s %.2f kg\n", "Gewicht:", weight);
         System.out.format("%-17s %.2f kg/m2\n", "BMI:", calculateBMI());
     }
@@ -84,5 +86,11 @@ double weight;
      */
     String fullName() {
         return String.format("%s %s", firstName, surname);
+    }
+
+    int calculateAge(LocalDate birthDate) {
+        LocalDate currentDate = LocalDate.now();
+        Period period = Period.between(birthDate, currentDate);
+        return period.getYears();
     }
 }

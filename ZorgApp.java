@@ -1,10 +1,24 @@
  import java.util.*;
 
  class ZorgApp {
+
         public static void main(String[] args) {
+            String RESET = "\u001B[0m";
+            String RED_TEXT = "\u001B[31m";
+            String GREEN_TEXT = "\u001B[32m";
+            String YELLOW_TEXT = "\u001B[33m";
+            String BLACK_TEXT = "\u001B[40m";
+            String BLUE_TEXT = "\u001B[44m";
+            String MAGENTA_TEXT = "\u001B[45m";
+            String CYAN_TEXT = "\u001B[46m";
+            String WHITE_TEXT = "\u001B[47m";
+            String BLACK_BG = "\u001B[40m";
+            String WHITE_BG = "\u001B[47m";
+
+
             System.out.println("=================================================");
             System.out.println(" ");
-            User user = new User(4, "Dr. Melvin Bos"); //Maak een gebruiker aan
+            User user = new User(4, "Dr. Melvin Bos");
             Administration administration = new Administration(user);
 
             //Voeg nieuwe gebruikers toe
@@ -18,7 +32,6 @@
             administration.listUsers();
 
 
-            // Gebruikerswissel
             boolean userSwitched = false;
             while (!userSwitched) {
                 System.out.print("Kies een gebruiker om naar te wisselen (gebruikers-ID): ");
@@ -39,7 +52,11 @@
                 }
             }
 
-
             administration.menu();
+
+            System.out.println(" ");
+            System.out.println(GREEN_TEXT + "Applicatie afsluiten..." + RESET);
+            System.out.println(" ");
+            System.out.println(GREEN_TEXT + "Applicatie afgesloten" + RESET);
         }
  }

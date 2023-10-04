@@ -11,6 +11,10 @@ class Administration {
     static final int Switch_User = 1;
     static final int Switch_Patient = 2;
     static final int VIEW = 3;
+    static final int BewerkVoornaam = 1;
+    static final int BewerkGeboortedatum = 2;
+    static final int BewerkLengte = 3;
+    static final int BewerkGewicht = 4;
 
     Patient currentPatient;
     User currentUser;
@@ -35,6 +39,7 @@ class Administration {
 
         currentPatient = patients.get(currentPatientIndex);
     }
+
     /**
      * Wat ik hierboven heb gedaan met de patiënten ga ik proberen hieronder met Users
      */
@@ -66,8 +71,7 @@ class Administration {
     void listPatients() {
         System.out.println("Lijst van alle patiënten:");
         for (Patient patient : patients) {
-            int age = calculateAge(patient.getDateOfBirth());
-            System.out.format("ID: [%d] %s, %s (%d jaar oud)\n", patient.id, patient.getSurname(), patient.getFirstName(), age);
+            System.out.format("ID: [%d] %s, %s\n", patient.id, patient.getSurname(), patient.getFirstName());
         }
     }
 
@@ -103,14 +107,14 @@ class Administration {
 
 
         switch (editChoice) {
-            case 1 -> {
+            case BewerkVoornaam -> {
                 System.out.print("Voer de nieuwe naam in: ");
                 String newName = scanner.nextLine();
                 currentPatient.setFirstName(newName);
                 System.out.println("Naam bijgewerkt naar: " + newName);
             }
 
-            case 2 -> {
+            case BewerkGeboortedatum -> {
                 System.out.print("Voer de nieuwe geboortedatum in (dd-MM-yyyy): ");
                 String newBirthDateStr = scanner.nextLine().trim();
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
@@ -123,7 +127,7 @@ class Administration {
                 }
             }
 
-            case 3 -> { // Bewerk lengte
+            case BewerkLengte -> { // Bewerk lengte
                 System.out.print("Voer de nieuwe lengte in (bijv. 1.75): ");
                 String heightInput = scanner.nextLine();
                 heightInput = heightInput.replace(",", ".");
@@ -137,7 +141,7 @@ class Administration {
                 }
             }
 
-            case 4 -> {
+            case BewerkGewicht -> {
                 System.out.print("Voer het nieuwe gewicht in (bijv. 75.0): ");
                 double newWeight;
                 try {
@@ -148,7 +152,7 @@ class Administration {
                     System.out.println("Ongeldig gewicht. Voer een geldig getal in (bijv. 75.0).");
                 }
             }
-            case 0 -> System.out.println("Terug naar hoofdmenu.");
+            case Stop -> System.out.println("Terug naar hoofdmenu.");
             default -> System.out.println("Ongeldige keuze.");
         }
     }
@@ -168,8 +172,6 @@ class Administration {
             System.out.format("Huidige gebruiker: [%d] %s\n", currentUser.getUserID(), currentUser.getUserName());
             System.out.println(" ");
             System.out.format("Huidige patiënt: %s [%s]\n", currentPatient.fullName(), currentPatient.getDateOfBirth().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
-
-
 
             System.out.format("%d:  Stop\n", Stop);
             System.out.format("%d:  Wissel naar een andere gebruiker\n", Switch_User);
@@ -192,8 +194,7 @@ class Administration {
             }
 
             switch (choice) {
-                case Stop ->
-                        nextCycle = false;
+                case Stop -> nextCycle = false;
 
                 case Switch_Patient -> {
                     listPatients();
@@ -270,7 +271,7 @@ class Administration {
 
                     switch (editChoice) {
                         case 1 -> editData();
-                        case 0 -> System.out.println("Terug naar hoofdmenu.");
+                        case Stop -> System.out.println("Terug naar hoofdmenu.");
                         default -> System.out.println("Ongeldige keuze.");
                     }
 
@@ -279,11 +280,5 @@ class Administration {
                 default -> System.out.println("Voer alstublieft een *geldig* getal in");
             }
         }
-    }
-
-    int calculateAge(LocalDate birthDate) {
-        LocalDate currentDate = LocalDate.now();
-        Period period = Period.between(birthDate, currentDate);
-        return period.getYears();
     }
 }
