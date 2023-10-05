@@ -76,6 +76,33 @@ class Administration {
         }
     }
 
+    void viewDataMenu() {
+        System.out.println(" ");
+        currentPatient.viewData();
+        System.out.println("=================================================");
+        System.out.println(" ");
+        System.out.println("1: Bewerk patiëntgegevens");
+        System.out.println("0: Terug naar hoofdmenu");
+        System.out.println(" ");
+        System.out.print("Maak een keuze: ");
+
+        int editChoice;
+        while (true) {
+            try {
+                editChoice = Integer.parseInt(scanner.nextLine());
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Geen geldige keuze, voer alstublieft een *geldig* getal in");
+                System.out.print("Maak een keuze: ");
+            }
+        }
+
+        switch (editChoice) {
+            case EDIT_DATA -> editData();
+            case Stop -> System.out.println("Terug naar hoofdmenu.");
+            default -> System.out.println("Ongeldige keuze.");
+        }
+    }
 
     void editData() {
         System.out.println("=================================================");
@@ -113,6 +140,7 @@ class Administration {
                 String newName = scanner.nextLine();
                 currentPatient.setFirstName(newName);
                 System.out.println("Naam bijgewerkt naar: " + newName);
+                viewDataMenu();
             }
 
             case BewerkGeboortedatum -> {
@@ -124,9 +152,11 @@ class Administration {
                     LocalDate newBirthDate = LocalDate.parse(newBirthDateStr, formatter);
                     currentPatient.setDateOfBirth(newBirthDate);
                     System.out.println("Geboortedatum bijgewerkt naar: " + newBirthDate.format(formatter));
+                    viewDataMenu();
                 } catch (DateTimeParseException e) {
                     System.out.println("Ongeldige datum. Voer een geldige datum in (dd-MM-yyyy).");
                 }
+                viewDataMenu();
             }
 
             case BewerkLengte -> { // Bewerk lengte
@@ -138,9 +168,11 @@ class Administration {
                     newHeight = Double.parseDouble(heightInput);
                     currentPatient.setHeight(newHeight);
                     System.out.println("Lengte bijgewerkt naar: " + newHeight);
+                    viewDataMenu();
                 } catch (NumberFormatException e) {
                     System.out.println("Ongeldige lengte. Voer een geldig getal in (bijv. 1.75).");
                 }
+                viewDataMenu();
             }
 
             case BewerkGewicht -> {
@@ -150,15 +182,17 @@ class Administration {
                     newWeight = Double.parseDouble(scanner.nextLine());
                     currentPatient.setWeight(newWeight);
                     System.out.println("Gewicht bijgewerkt naar: " + newWeight);
+                    viewDataMenu();
                 } catch (NumberFormatException e) {
                     System.out.println("Ongeldig gewicht. Voer een geldig getal in (bijv. 75.0).");
                 }
+                viewDataMenu();
             }
+
             case Stop -> System.out.println("Terug naar hoofdmenu.");
             default -> System.out.println("Ongeldige keuze.");
         }
     }
-
 
     void menu() {
         var scanner = new Scanner(System.in);
@@ -250,34 +284,7 @@ class Administration {
                     }
                 }
 
-                case VIEW -> {
-                    System.out.println(" ");
-                    currentPatient.viewData();
-                    System.out.println("=================================================");
-                    System.out.println(" ");
-                    System.out.println("1: Bewerk patiëntgegevens");
-                    System.out.println("0: Terug naar hoofdmenu");
-                    System.out.println(" ");
-                    System.out.print("Maak een keuze: ");
-
-                    int editChoice;
-                    while (true) {
-                        try {
-                            editChoice = Integer.parseInt(scanner.nextLine());
-                            break;
-                        } catch (NumberFormatException e) {
-                            System.out.println("Geen geldige keuze, voer alstublieft een *geldig* getal in");
-                            System.out.print("Maak een keuze: ");
-                        }
-                    }
-
-                    switch (editChoice) {
-                        case EDIT_DATA -> editData();
-                        case Stop -> System.out.println("Terug naar hoofdmenu.");
-                        default -> System.out.println("Ongeldige keuze.");
-                    }
-
-                }
+                case VIEW -> viewDataMenu();
 
                 default -> System.out.println("Voer alstublieft een *geldig* getal in");
             }

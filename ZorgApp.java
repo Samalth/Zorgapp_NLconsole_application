@@ -13,9 +13,8 @@
             String BLACK_BG = "\u001B[40m";
             String WHITE_BG = "\u001B[47m";
 
-
-            System.out.println("=================================================");
             System.out.println(" ");
+            System.out.println("=================================================");
             User user = new User(4, "Dr. Melvin Bos");
             Administration administration = new Administration(user);
 
