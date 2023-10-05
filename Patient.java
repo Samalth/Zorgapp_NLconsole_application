@@ -79,6 +79,7 @@ double weight;
         System.out.format("%-17s %.2f  m\n", "Lengte:", height);
         System.out.format("%-17s %.2f kg\n", "Gewicht:", weight);
         System.out.format("%-17s %.2f kg/m2\n", "BMI:", calculateBMI());
+
     }
 
     /**

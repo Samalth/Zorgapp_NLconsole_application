@@ -4,13 +4,14 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.Period;
 import java.util.Scanner;
-import java.util.*;
+
 
 class Administration {
     static final int Stop = 0;
     static final int Switch_User = 1;
     static final int Switch_Patient = 2;
     static final int VIEW = 3;
+    static final int EDIT_DATA = 1;
     static final int BewerkVoornaam = 1;
     static final int BewerkGeboortedatum = 2;
     static final int BewerkLengte = 3;
@@ -118,6 +119,7 @@ class Administration {
                 System.out.print("Voer de nieuwe geboortedatum in (dd-MM-yyyy): ");
                 String newBirthDateStr = scanner.nextLine().trim();
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
                 try {
                     LocalDate newBirthDate = LocalDate.parse(newBirthDateStr, formatter);
                     currentPatient.setDateOfBirth(newBirthDate);
@@ -270,7 +272,7 @@ class Administration {
                     }
 
                     switch (editChoice) {
-                        case 1 -> editData();
+                        case EDIT_DATA -> editData();
                         case Stop -> System.out.println("Terug naar hoofdmenu.");
                         default -> System.out.println("Ongeldige keuze.");
                     }
