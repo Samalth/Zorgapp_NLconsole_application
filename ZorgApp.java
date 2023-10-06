@@ -7,14 +7,14 @@
             String RED_TEXT = "\u001B[31m";
             String GREEN_TEXT = "\u001B[32m";
             String YELLOW_TEXT = "\u001B[33m";
-            String BLUE_BG = "\u001B[44m";
-            String MAGENTA_BG = "\u001B[45m";
-            String CYAN_TEXT = "\u001B[46m";
-            String BLACK_BG = "\u001B[40m";
-            String WHITE_BG = "\u001B[47m";
+            String BLUE_TEXT = "\u001B[34m";
+            String PURPLE_TEXT = "\u001B[35m";
+            String CYAN_TEXT = "\u001B[36m";
+
+
 
             System.out.println(" ");
-            System.out.println("=================================================");
+            System.out.format("%s\n", "=".repeat(60));
             User user = new User(4, "Dr. Melvin Bos");
             Administration administration = new Administration(user);
 

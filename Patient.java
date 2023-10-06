@@ -4,12 +4,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 class Patient {
-    //de static final int(s) hieronder doen niks
-   static final int RETURN       = 0;
-    static final int SURNAME     = 1;
-    static final int FIRSTNAME   = 2;
-    static final int Height      = 3;
-    static final int Weight      = 4;
+
 
     /**
      * Berekenen BMI adh van lengte en gewicht
@@ -17,6 +12,9 @@ class Patient {
     // Voeg een setter-methode toe voor de voornaam
     public void setFirstName(String firstName) {
         this.firstName = firstName;
+    }
+    public void setSurname(String surname) {
+        this.firstName = surname;
     }
     public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
@@ -67,15 +65,19 @@ double weight;
         return firstName;
     }
 
+    public int getId() { return id; }
+    public double getHeight() { return height; }
+    public double getWeight() { return weight; }
+
     /**
      * Display patient data.
      */
     void viewData() {
         System.out.format("===== Patiënt id=%d ==============================\n", id);
-        System.out.format("%-17s %s\n", "Achternaam:", surname);
         System.out.format("%-17s %s\n", "Voornaam:", firstName);
+        System.out.format("%-17s %s\n", "Achternaam:", surname);
         System.out.format("%-17s %s\n", "Geboortedatum:", dateOfBirth.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
-        System.out.format("%-17s %d jaar\n", "Leeftijd:", calculateAge(dateOfBirth));
+        System.out.format("%-17s %d    jaar\n", "Leeftijd:", calculateAge(dateOfBirth));
         System.out.format("%-17s %.2f  m\n", "Lengte:", height);
         System.out.format("%-17s %.2f kg\n", "Gewicht:", weight);
         System.out.format("%-17s %.2f kg/m2\n", "BMI:", calculateBMI());
@@ -88,6 +90,7 @@ double weight;
     String fullName() {
         return String.format("%s %s", firstName, surname);
     }
+
 
     int calculateAge(LocalDate birthDate) {
         LocalDate currentDate = LocalDate.now();

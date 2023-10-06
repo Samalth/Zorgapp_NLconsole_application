@@ -11,11 +11,12 @@ class Administration {
     static final int Switch_User = 1;
     static final int Switch_Patient = 2;
     static final int VIEW = 3;
-    static final int EDIT_DATA = 1;
+    static final int BewerkPatiëntGegevens = 1;
     static final int BewerkVoornaam = 1;
-    static final int BewerkGeboortedatum = 2;
-    static final int BewerkLengte = 3;
-    static final int BewerkGewicht = 4;
+    static final int BewerkAchternaam = 2;
+    static final int BewerkGeboortedatum = 3;
+    static final int BewerkLengte = 4;
+    static final int BewerkGewicht = 5;
 
     Patient currentPatient;
     User currentUser;
@@ -41,9 +42,6 @@ class Administration {
         currentPatient = patients.get(currentPatientIndex);
     }
 
-    /**
-     * Wat ik hierboven heb gedaan met de patiënten ga ik proberen hieronder met Users
-     */
     ArrayList<User> users = new ArrayList<>();
 
     boolean switchUser(int newUserId) {
@@ -98,7 +96,7 @@ class Administration {
         }
 
         switch (editChoice) {
-            case EDIT_DATA -> editData();
+            case BewerkPatiëntGegevens -> editData();
             case Stop -> System.out.println("Terug naar hoofdmenu.");
             default -> System.out.println("Ongeldige keuze.");
         }
@@ -113,14 +111,14 @@ class Administration {
         System.out.println(" ");
 
         System.out.println("Bewerk patiëntgegevens:");
-        System.out.println("1:  Bewerk naam");
-        System.out.println("2:  Bewerk geboortedatum");
-        System.out.println("3:  Bewerk lengte");
-        System.out.println("4:  Bewerk gewicht");
+        System.out.println("1:  Bewerk voornaam");
+        System.out.println("2:  Bewerk achternaam");
+        System.out.println("3:  Bewerk geboortedatum");
+        System.out.println("4:  Bewerk lengte");
+        System.out.println("5:  Bewerk gewicht");
         System.out.println("0:  Terug naar hoofdmenu");
 
         System.out.print("Maak een keuze: ");
-
 
         int editChoice;
         while (true) {
@@ -133,13 +131,19 @@ class Administration {
             }
         }
 
-
         switch (editChoice) {
             case BewerkVoornaam -> {
                 System.out.print("Voer de nieuwe naam in: ");
                 String newName = scanner.nextLine();
                 currentPatient.setFirstName(newName);
                 System.out.println("Naam bijgewerkt naar: " + newName);
+                viewDataMenu();
+            }
+            case BewerkAchternaam -> {
+                System.out.print("Voer de nieuwe achternaam in: ");
+                String newSurname = scanner.nextLine();
+                currentPatient.setSurname(newSurname);
+                System.out.println("Achternaam bijgewerkt naar: " + newSurname);
                 viewDataMenu();
             }
 
@@ -212,11 +216,9 @@ class Administration {
             System.out.format("%d:  Stop\n", Stop);
             System.out.format("%d:  Wissel naar een andere gebruiker\n", Switch_User);
             System.out.format("%d:  Wissel naar een andere patiënt\n", Switch_Patient);
-            System.out.format("%d:  Bekijk de data van huidige patiënt\n", VIEW);
-
+            System.out.format("%d:  Bekijk/bewerk gegevens van huidige patiënt\n", VIEW);
 
             System.out.print("Maak een keuze: ");
-
 
             int choice;
             while (true) {
@@ -235,7 +237,6 @@ class Administration {
                 case Switch_Patient -> {
                     listPatients();
                     System.out.print("Vul gebruikers ID in om te wisselen: ");
-
 
                     int newIndex;
                     while (true) {
@@ -264,7 +265,6 @@ class Administration {
                     }
                     System.out.print("Vul gebruikers ID in om te wisselen: ");
 
-
                     int newIndex;
                     while (true) {
                         try {
@@ -283,7 +283,6 @@ class Administration {
                         System.out.println("ID niet herkend");
                     }
                 }
-
                 case VIEW -> viewDataMenu();
 
                 default -> System.out.println("Voer alstublieft een *geldig* getal in");
