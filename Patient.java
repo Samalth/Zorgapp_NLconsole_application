@@ -2,14 +2,11 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.HashMap;
+import java.util.Map;
 
 class Patient {
 
-
-    /**
-     * Berekenen BMI adh van lengte en gewicht
-     */
-    // Voeg een setter-methode toe voor de voornaam
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
@@ -26,8 +23,8 @@ class Patient {
         this.weight = length;
     }
 
-double height;
-double weight;
+    double height;
+    double weight;
     double calculateBMI() {
         if (height <= 0 || weight <= 0) {
             return 0.0;  // Dit is zodat er niet wordt gedeeld door nul of dat de uitkomst het negatief wordt
@@ -37,9 +34,9 @@ double weight;
     }
 
     int       id;
-   String    surname;
-   String    firstName;
-   LocalDate dateOfBirth;
+    String    surname;
+    String    firstName;
+    LocalDate dateOfBirth;
 
     /**
      * Constructor

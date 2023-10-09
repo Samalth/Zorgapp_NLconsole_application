@@ -5,7 +5,6 @@ import java.time.format.DateTimeParseException;
 import java.time.Period;
 import java.util.Scanner;
 
-
 class Administration {
     static final int Stop = 0;
     static final int Switch_User = 1;
