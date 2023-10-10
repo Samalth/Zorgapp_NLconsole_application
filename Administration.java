@@ -16,6 +16,11 @@ class Administration {
     static final int BewerkGeboortedatum = 3;
     static final int BewerkLengte = 4;
     static final int BewerkGewicht = 5;
+    static final int BewerkMedicatie = 6;
+    static final int ToevoegenMedicatie = 1;
+    static final int VerwijderMedicatie = 2;
+    static final int BewerkDosering = 3;
+
 
     Patient currentPatient;
     User currentUser;
@@ -60,7 +65,7 @@ class Administration {
     }
 
     void listUsers() {
-        System.out.println("Lijst van alle gebruikers:");
+        System.out.println("Selecteer een gebruiker: ");
         for (User user : users) {
             System.out.format("ID: [%d] %s\n", user.getUserID(), user.getUserName());
         }
@@ -96,6 +101,7 @@ class Administration {
 
         switch (editChoice) {
             case BewerkPatiëntGegevens -> editData();
+
             case Stop -> System.out.println("Terug naar hoofdmenu.");
             default -> System.out.println("Ongeldige keuze.");
         }
@@ -191,7 +197,76 @@ class Administration {
                 }
                 viewDataMenu();
             }
+            case BewerkMedicatie -> {
+                try {
+                    currentPatient.viewMedications();
+                    System.out.println("1: Voeg medicijn toe");
+                    System.out.println("2: Verwijder medicijn");
+                    System.out.println("3: Bewerk medicijn dosering");
+                    System.out.println("0: Terug naar hoofdmenu");
+                    System.out.print("Maak een keuze: ");
 
+                    int medicationChoice;
+                    while (true) {
+                        try {
+                            medicationChoice = Integer.parseInt(scanner.nextLine());
+                            break;
+                        } catch (NumberFormatException e) {
+                            System.out.println("Geen geldige keuze, voer alstublieft een *geldig* getal in");
+                            System.out.print("Maak een keuze: ");
+                        }
+                    }
+
+                    switch (medicationChoice) {
+                        case ToevoegenMedicatie -> {
+                            // Voeg medicijn toe
+                            System.out.print("Voer de naam van het medicijn in: ");
+                            String medicationName = scanner.nextLine();
+                            System.out.print("Voer de dosering in: ");
+                            String medicationDosage = scanner.nextLine();
+                            currentPatient.addMedication(medicationName, medicationDosage);
+                            System.out.println("Medicijn toegevoegd.");
+                        }
+                        case VerwijderMedicatie -> {
+                            System.out.print("Voer het ID in van het te verwijderen medicijn: ");
+                            int medicationIndex;
+                            while (true) {
+                                try {
+                                    medicationIndex = Integer.parseInt(scanner.nextLine());
+                                    break;
+                                } catch (NumberFormatException e) {
+                                    System.out.println("Geen geldig ID, voer een *geldig* ID in: ");
+                                    System.out.print("Voer het ID in van het te verwijderen medicijn: ");
+                                }
+                            }
+                            currentPatient.removeMedication(medicationIndex);
+                            System.out.println("Medicijn verwijderd.");
+                        }
+                        case BewerkDosering -> {
+                            System.out.print("Voer het ID in van het te bewerken medicijn: ");
+                            int medicationIndex;
+                            while (true) {
+                                try {
+                                    medicationIndex = Integer.parseInt(scanner.nextLine());
+                                    break;
+                                } catch (NumberFormatException e) {
+                                    System.out.println("Geen geldig ID, voer een *geldig* ID in: ");
+                                    System.out.print("Voer het ID in van het te bewerken medicijn: ");
+                                }
+                            }
+                            System.out.print("Voer de nieuwe dosering in: ");
+                            String newDosage = scanner.nextLine();
+                            currentPatient.editMedicationDosage(medicationIndex, newDosage);
+                            System.out.println("Dosering bijgewerkt.");
+                        }
+                        case Stop -> {
+                        }
+                        default -> System.out.println("Ongeldige keuze.");
+                    }
+                } catch (Exception e) {
+                    System.out.println("Er is een fout opgetreden bij het bewerken van medicijnen: " + e.getMessage());
+                }
+            }
             case Stop -> System.out.println("Terug naar hoofdmenu.");
             default -> System.out.println("Ongeldige keuze.");
         }
