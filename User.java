@@ -1,6 +1,7 @@
 class User {
-    String userName;
+
     int userID;
+    String userName;
 
     public User(int id, String name) {
         this.userID = id;

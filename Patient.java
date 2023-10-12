@@ -6,6 +6,8 @@ import java.util.*;
 
 class Patient {
     private List<Medication> medications;
+    String RESET = "\u001B[0m";
+    String CYAN_TEXT = "\u001B[36m";
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
@@ -26,6 +28,7 @@ class Patient {
         Medication medication = new Medication(name, dosage);
         medications.add(medication);
     }
+
     public void editMedicationDosage(int index, String newDosage) {
         if (index >= 0 && index < medications.size()) {
             medications.get(index).setDosage(newDosage);
@@ -39,10 +42,16 @@ class Patient {
     }
 
     public void viewMedications() {
-        System.out.println("Medicijnen van de patiënt:");
-        for (Medication medication : medications) {
-            System.out.format("Medicijn: %s, Dosering: %s\n", medication.getName(), medication.getDosage());
+        System.out.println(" ");
+        if (medications.isEmpty()) {
+            System.out.println("Medicatie: Geen medicatie voorgeschreven");
+        } else {
+            System.out.println( CYAN_TEXT + "Voorgeschreven medicatie van patiënt:" + RESET);
+            for (Medication medication : medications) {
+                System.out.format("Medicatie: %s, Dosering: %s\n", medication.getName(), medication.getDosage());
+            }
         }
+        System.out.println(" ");
     }
 
     double height;
@@ -54,7 +63,6 @@ class Patient {
 
         return weight / (height * height);
     }
-
     int       id;
     String    surname;
     String    firstName;
@@ -102,7 +110,7 @@ class Patient {
         System.out.format("%-17s %.2f  m\n", "Lengte:", height);
         System.out.format("%-17s %.2f kg\n", "Gewicht:", weight);
         System.out.format("%-17s %.2f kg/m2\n", "BMI:", calculateBMI());
-
+        viewMedications();
     }
 
     String fullName() {

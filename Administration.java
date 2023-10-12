@@ -21,19 +21,16 @@ class Administration {
     static final int VerwijderMedicatie = 2;
     static final int BewerkDosering = 3;
 
-
     Patient currentPatient;
     User currentUser;
-
     ArrayList<Patient> patients = new ArrayList<>();
     int currentPatientIndex = 0;
     Scanner scanner = new Scanner(System.in);
 
     Administration(User user) {
         currentUser = user;
-        patients.add(new Patient(0, "Alexsen", "Samuel", LocalDate.of(2006, 6, 7), 1.75, 98.4));
-        patients.add(new Patient(1, "Baan", "Tijmen", LocalDate.of(2005, 5, 9), 1.92, 93.0));
-        patients.add(new Patient(2, "Darnell", "Jairano", LocalDate.of(1983, 3, 30), 1.80, 80.0));
+        patients.add(new Patient(1, "Alexsen", "Samuel", LocalDate.of(2006, 6, 7), 1.75, 98.4));
+        patients.add(new Patient(2, "Baan", "Tijmen", LocalDate.of(2005, 5, 9), 1.92, 93.0));
         patients.add(new Patient(3, "De Boom", "Rachel", LocalDate.of(1983, 3, 30), 1.80, 80.0));
         patients.add(new Patient(4, "Cornelis", "Kees", LocalDate.of(1971, 11, 11), 1.80, 80.0));
         patients.add(new Patient(5, "Doorn", "Willem-Jan", LocalDate.of(1983, 3, 30), 1.80, 80.0));
@@ -43,9 +40,14 @@ class Administration {
         patients.add(new Patient(9, "Van Guitton", "Louis", LocalDate.of(1949, 9, 16), 1.80, 80.0));
         patients.add(new Patient(10, "Zeukel", "Mohammed", LocalDate.of(1983, 3, 30), 1.80, 80.0));
 
+        patients.get(0).addMedication("Tocoferol, dl-alfa- acetaat", "Tabletten: 50mg");
+        patients.get(0).addMedication("(Es)omeprazol ", "Tabletten: 10mg");
+
+        patients.get(1).addMedication("Medicijn 3", "Dosage 3");
+        patients.get(1).addMedication("Medicijn 4", "Dosage 4");
+
         currentPatient = patients.get(currentPatientIndex);
     }
-
     ArrayList<User> users = new ArrayList<>();
 
     boolean switchUser(int newUserId) {
@@ -59,7 +61,7 @@ class Administration {
     }
 
     void addUser(String userName) {
-        int userId = users.size();
+        int userId = users.size() + 1;
         User user = new User(userId, userName);
         users.add(user);
     }
@@ -121,6 +123,7 @@ class Administration {
         System.out.println("3:  Bewerk geboortedatum");
         System.out.println("4:  Bewerk lengte");
         System.out.println("5:  Bewerk gewicht");
+        System.out.println("6:  Bewerk Medicatie");
         System.out.println("0:  Terug naar hoofdmenu");
 
         System.out.print("Maak een keuze: ");
@@ -219,14 +222,49 @@ class Administration {
 
                     switch (medicationChoice) {
                         case ToevoegenMedicatie -> {
-                            // Voeg medicijn toe
-                            System.out.print("Voer de naam van het medicijn in: ");
-                            String medicationName = scanner.nextLine();
-                            System.out.print("Voer de dosering in: ");
-                            String medicationDosage = scanner.nextLine();
+                            System.out.println("Kies een medicijn (1-10): ");
+                            for (int i = 1; i <= 10; i++) {
+                                System.out.println(i + ": Medicijn " + i);
+                            }
+                            int selectedMedication;
+                            while (true) {
+                                try {
+                                    selectedMedication = Integer.parseInt(scanner.nextLine());
+                                    if (selectedMedication >= 1 && selectedMedication <= 10) {
+                                        break;
+                                    } else {
+                                        System.out.println("Ongeldige keuze, kies een nummer tussen 1 en 10.");
+                                    }
+                                } catch (NumberFormatException e) {
+                                    System.out.println("Ongeldige keuze, voer een *geldig* getal in.");
+                                }
+                            }
+
+                            System.out.println("Kies een dosering (1-10): ");
+                            for (int i = 1; i <= 10; i++) {
+                                System.out.println(i + ": Dosage " + i);
+                            }
+                            int selectedDosage;
+                            while (true) {
+                                try {
+                                    selectedDosage = Integer.parseInt(scanner.nextLine());
+                                    if (selectedDosage >= 1 && selectedDosage <= 10) {
+                                        break;
+                                    } else {
+                                        System.out.println("Ongeldige keuze, kies een nummer tussen 1 en 10.");
+                                    }
+                                } catch (NumberFormatException e) {
+                                    System.out.println("Ongeldige keuze, voer een *geldig* getal in.");
+                                }
+                            }
+
+                            String medicationName = "Medicijn " + selectedMedication;
+                            String medicationDosage = "Dosage " + selectedDosage;
                             currentPatient.addMedication(medicationName, medicationDosage);
                             System.out.println("Medicijn toegevoegd.");
+                            viewDataMenu();
                         }
+
                         case VerwijderMedicatie -> {
                             System.out.print("Voer het ID in van het te verwijderen medicijn: ");
                             int medicationIndex;
@@ -310,55 +348,53 @@ class Administration {
 
                 case Switch_Patient -> {
                     listPatients();
-                    System.out.print("Vul gebruikers ID in om te wisselen: ");
 
                     int newIndex;
                     while (true) {
+                        System.out.print("Vul patiënt-ID in om te wisselen: ");
                         try {
                             newIndex = Integer.parseInt(scanner.nextLine());
-                            break;
-                        } catch (NumberFormatException e) {
-                            System.out.println("Geen geldig patiënt ID");
-                            System.out.print("Vul gebruikers ID in om te wisselen: ");
-                        }
-                    }
+                            if (newIndex >= 1 && newIndex < patients.size()) {
+                                currentPatientIndex = newIndex -1;
 
-                    if (newIndex >= 0 && newIndex < patients.size()) {
-                        currentPatientIndex = newIndex;
-                        currentPatient = patients.get(currentPatientIndex);
-                        System.out.format("Gewisseld naar patiënt: %s\n", currentPatient.fullName());
-                    } else {
-                        System.out.println("Geen geldig patiënt ID");
+                                currentPatient = patients.get(currentPatientIndex);
+                                System.out.format("Gewisseld naar patiënt: %s\n", currentPatient.fullName());
+                                break;
+                            } else {
+                                if (newIndex != 0) {
+                                    System.out.println("Geen geldig patiënt ID");
+                                }
+                            }
+                        } catch (NumberFormatException e) {
+                            System.out.println("Geen geldige invoer. Voer een geldig geheel getal in voor het patiënt-ID.");
+                        }
                     }
                 }
 
                 case Switch_User -> {
+                    System.out.println(" ");
                     System.out.println("Lijst van alle gebruikers:");
                     for (User user : users) {
                         System.out.format("[%d] %s\n", user.getUserID(), user.getUserName());
                     }
                     System.out.print("Vul gebruikers ID in om te wisselen: ");
-
                     int newIndex;
                     while (true) {
+                        System.out.print("Vul gebruikers-ID in om te wisselen: ");
                         try {
                             newIndex = Integer.parseInt(scanner.nextLine());
-                            break;
+                            if (newIndex >= 1 && newIndex < users.size()) {
+                                currentUser = users.get(newIndex -1);
+                                System.out.format("Gewisseld naar gebruiker: [%d] %s\n", currentUser.getUserID(), currentUser.getUserName());                                break;
+                            } else {
+                                System.out.println("Geen geldig gebruikers ID");
+                            }
                         } catch (NumberFormatException e) {
-                            System.out.println("Voer alstublieft een *geldig* getal in");
-                            System.out.print("Vul gebruikers ID in om te wisselen: ");
+                            System.out.println("Geen geldige invoer. Voer een geldig *geldig* getal in");
                         }
-                    }
-
-                    if (newIndex >= 0 && newIndex < users.size()) {
-                        currentUser = users.get(newIndex);
-                        System.out.format("Gewisseld naar gebruiker: [%d] %s\n", currentUser.getUserID(), currentUser.getUserName());
-                    } else {
-                        System.out.println("ID niet herkend");
                     }
                 }
                 case VIEW -> viewDataMenu();
-
                 default -> System.out.println("Voer alstublieft een *geldig* getal in");
             }
         }
