@@ -98,9 +98,6 @@ class Patient {
     public double getHeight() { return height; }
     public double getWeight() { return weight; }
 
-    /**
-     * Display patient data.
-     */
     void viewData() {
         System.out.format("===== Patiënt id=%d ==============================\n", id);
         System.out.format("%-17s %s\n", "Voornaam:", firstName);

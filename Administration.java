@@ -4,7 +4,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.Period;
 import java.util.Scanner;
-
 class Administration {
     static final int Stop = 0;
     static final int Switch_User = 1;
@@ -356,7 +355,6 @@ class Administration {
                             newIndex = Integer.parseInt(scanner.nextLine());
                             if (newIndex >= 1 && newIndex < patients.size()) {
                                 currentPatientIndex = newIndex -1;
-
                                 currentPatient = patients.get(currentPatientIndex);
                                 System.out.format("Gewisseld naar patiënt: %s\n", currentPatient.fullName());
                                 break;
@@ -385,7 +383,8 @@ class Administration {
                             newIndex = Integer.parseInt(scanner.nextLine());
                             if (newIndex >= 1 && newIndex < users.size()) {
                                 currentUser = users.get(newIndex -1);
-                                System.out.format("Gewisseld naar gebruiker: [%d] %s\n", currentUser.getUserID(), currentUser.getUserName());                                break;
+                                System.out.format("Gewisseld naar gebruiker: [%d] %s\n", currentUser.getUserID(), currentUser.getUserName());
+                                break;
                             } else {
                                 System.out.println("Geen geldig gebruikers ID");
                             }
