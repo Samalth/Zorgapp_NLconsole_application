@@ -11,13 +11,16 @@ class ZorgApp {
 
         System.out.println(" ");
         System.out.format("%s\n", "=".repeat(60));
+        System.out.println(" ");
+        System.out.println(GREEN_TEXT + "Welkom" + RESET);
+        System.out.println(" ");
         User user = new User(7, "Dokter-Chirurg","Melvin Bos");
         Administration administration = new Administration(user);
 
-        administration.addUser(new User(1,"Fysiotherapeut", "William Riker"));
+        administration.addUser(new User(1,"Fysiotherapeut", "Willem Rijker"));
         administration.addUser(new User(2,"Huisarts", "Bob Metselaar"));
-        administration.addUser(new User(3,"Tandarts","Jabba de Hut"));
-        administration.addUser(new User(5,"Apotheker","Dirk Kat"));
+        administration.addUser(new User(3,"Tandarts","Joop de Hut"));
+        administration.addUser(new User(5,"Apotheker","Stan de Water"));
         administration.addUser(new User(7,"Dokter-Chirurg","Melvin van de Tak"));
 
         administration.listUsers();
@@ -31,7 +34,7 @@ class ZorgApp {
 
                 if (administration.switchUser(switchUserId)) {
                     userSwitched = true;
-                    System.out.println("Gewisseld naar gebruiker: " + administration.currentUser.getUserName());
+                    System.out.format("Gewisseld naar gebruiker: %s %s\n", administration.currentUser.getUserRole(), administration.currentUser.getUserName());
                     System.out.println(" ");
                 } else {
                     System.out.println("Ongeldige gebruikers-ID. Probeer opnieuw.");

@@ -72,9 +72,10 @@ class Administration {
     }
 
     void listPatients() {
+        System.out.println(" ");
         System.out.println("Lijst van alle patiënten:");
         for (Patient patient : patients) {
-            System.out.format("ID: [%d] %s, %s\n", patient.id, patient.getSurname(), patient.getFirstName());
+            System.out.format("[%d] %s, %s\n", patient.id, patient.getSurname(), patient.getFirstName());
         }
     }
 
@@ -319,7 +320,7 @@ class Administration {
             System.out.println("===HOOFDMENU===");
             System.out.println("===============");
             System.out.println(" ");
-            System.out.format("Huidige gebruiker: [%d] %s\n", currentUser.getUserID(), currentUser.getUserName());
+            System.out.format("Huidige gebruiker: [%d] %s %s\n", currentUser.getUserID(), currentUser.getUserRole(), currentUser.getUserName());
             System.out.println(" ");
             System.out.format("Huidige patiënt: %s [%s]\n", currentPatient.fullName(), currentPatient.getDateOfBirth().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
 
@@ -376,7 +377,7 @@ class Administration {
                     System.out.println(" ");
                     System.out.println("Lijst van alle gebruikers:");
                     for (User user : users) {
-                        System.out.format("[%d] %s\n", user.getUserID(), user.getUserName());
+                        System.out.format("[%d] %s %s\n", user.getUserID(), user.getUserRole(), user.getUserName());
                     }
                     System.out.print("Vul gebruikers ID in om te wisselen: ");
                     int newIndex;
@@ -386,7 +387,7 @@ class Administration {
                             newIndex = Integer.parseInt(scanner.nextLine());
                             if (newIndex >= 1 && newIndex < users.size()) {
                                 currentUser = users.get(newIndex -1);
-                                System.out.format("Gewisseld naar gebruiker: [%d] %s\n", currentUser.getUserID(), currentUser.getUserName());
+                                System.out.format("Gewisseld naar gebruiker: [%d] %s %s\n", currentUser.getUserID(), currentUser.getUserRole(), currentUser.getUserName());
                                 break;
                             } else {
                                 System.out.println("Geen geldig gebruikers ID");
