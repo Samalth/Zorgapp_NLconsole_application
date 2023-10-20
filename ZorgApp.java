@@ -11,14 +11,14 @@ class ZorgApp {
 
         System.out.println(" ");
         System.out.format("%s\n", "=".repeat(60));
-        User user = new User(4, "Dr. Melvin Bos");
+        User user = new User(7, "Dokter-Chirurg","Melvin Bos");
         Administration administration = new Administration(user);
 
-        administration.addUser("Fysiotherapeut William Riker");
-        administration.addUser("Huisarts Bob Metselaar");
-        administration.addUser("Tandarts Jabba de Hut");
-        administration.addUser("Apotheker Dirk Kat");
-        administration.addUser("Dr Melvin Bos");
+        administration.addUser(new User(1,"Fysiotherapeut", "William Riker"));
+        administration.addUser(new User(2,"Huisarts", "Bob Metselaar"));
+        administration.addUser(new User(3,"Tandarts","Jabba de Hut"));
+        administration.addUser(new User(5,"Apotheker","Dirk Kat"));
+        administration.addUser(new User(7,"Dokter-Chirurg","Melvin van de Tak"));
 
         administration.listUsers();
 

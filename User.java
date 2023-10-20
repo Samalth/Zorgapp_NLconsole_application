@@ -2,10 +2,12 @@ class User {
 
     int userID;
     String userName;
+    String userRole;
 
-    public User(int id, String name) {
-        this.userID = id;
+    public User(int userID, String userRole, String name) {
+        this.userID = userID;
         this.userName = name;
+        this.userRole = userRole;
     }
 
     String getUserName() {
@@ -15,4 +17,9 @@ class User {
     int getUserID() {
         return userID;
     }
+
+    String getUserRole() {
+        return userRole;
+    }
+
 }

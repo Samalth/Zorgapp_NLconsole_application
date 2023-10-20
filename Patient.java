@@ -24,6 +24,7 @@ class Patient {
     public void setWeight(double length) {
         this.weight = length;
     }
+
     public void addMedication(String name, String dosage) {
         Medication medication = new Medication(name, dosage);
         medications.add(medication);

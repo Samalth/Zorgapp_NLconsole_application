@@ -4,6 +4,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.Period;
 import java.util.Scanner;
+import java.util.HashMap;
 class Administration {
     static final int Stop = 0;
     static final int Switch_User = 1;
@@ -23,21 +24,21 @@ class Administration {
     Patient currentPatient;
     User currentUser;
     ArrayList<Patient> patients = new ArrayList<>();
-    int currentPatientIndex = 0;
+    int currentPatientIndex = 3;
     Scanner scanner = new Scanner(System.in);
 
     Administration(User user) {
         currentUser = user;
-        patients.add(new Patient(1, "Alexsen", "Samuel", LocalDate.of(2006, 6, 7), 1.75, 98.4));
+        patients.add(new Patient(69, "Alexsen", "Samuel", LocalDate.of(2006, 6, 7), 1.75, 98.4));
         patients.add(new Patient(2, "Baan", "Tijmen", LocalDate.of(2005, 5, 9), 1.92, 93.0));
         patients.add(new Patient(3, "De Boom", "Rachel", LocalDate.of(1983, 3, 30), 1.80, 80.0));
         patients.add(new Patient(4, "Cornelis", "Kees", LocalDate.of(1971, 11, 11), 1.80, 80.0));
-        patients.add(new Patient(5, "Doorn", "Willem-Jan", LocalDate.of(1983, 3, 30), 1.80, 80.0));
+        patients.add(new Patient(5, "Rozenbrood", "Willem", LocalDate.of(1983, 3, 30), 1.80, 80.0));
         patients.add(new Patient(6, "Masha", "Fenna", LocalDate.of(1983, 3, 30), 1.80, 80.0));
-        patients.add(new Patient(7, "Oudehof", "Kim", LocalDate.of(2006, 2, 19), 1.80, 80.0));
+        patients.add(new Patient(7, "Jonkhof", "Kim", LocalDate.of(2006, 2, 19), 1.80, 80.0));
         patients.add(new Patient(8, "Schumacher", "Koos", LocalDate.of(1983, 3, 30), 1.80, 80.0));
         patients.add(new Patient(9, "Van Guitton", "Louis", LocalDate.of(1949, 9, 16), 1.80, 80.0));
-        patients.add(new Patient(10, "Zeukel", "Mohammed", LocalDate.of(1983, 3, 30), 1.80, 80.0));
+        patients.add(new Patient(11, "Zeukel", "Mohammed", LocalDate.of(1983, 3, 30), 1.80, 80.0));
 
         patients.get(0).addMedication("Tocoferol, dl-alfa- acetaat", "Tabletten: 50mg");
         patients.get(0).addMedication("(Es)omeprazol ", "Tabletten: 10mg");
@@ -59,16 +60,14 @@ class Administration {
         return false;
     }
 
-    void addUser(String userName) {
-        int userId = users.size() + 1;
-        User user = new User(userId, userName);
+    void addUser(User user) {
         users.add(user);
     }
 
     void listUsers() {
         System.out.println("Selecteer een gebruiker: ");
         for (User user : users) {
-            System.out.format("ID: [%d] %s\n", user.getUserID(), user.getUserName());
+            System.out.format("ID: [%d] %s %s\n", user.getUserID(),user.getUserRole(), user.getUserName());
         }
     }
 
@@ -170,7 +169,7 @@ class Administration {
                 viewDataMenu();
             }
 
-            case BewerkLengte -> { // Bewerk lengte
+            case BewerkLengte -> {
                 System.out.print("Voer de nieuwe lengte in (bijv. 1.75): ");
                 String heightInput = scanner.nextLine();
                 heightInput = heightInput.replace(",", ".");
@@ -348,23 +347,27 @@ class Administration {
                 case Switch_Patient -> {
                     listPatients();
 
-                    int newIndex;
+                    int newPatientId;
                     while (true) {
-                        System.out.print("Vul patiënt-ID in om te wisselen: ");
+                        System.out.print("Voer het ID van de patiënt in om te wisselen: ");
                         try {
-                            newIndex = Integer.parseInt(scanner.nextLine());
-                            if (newIndex >= 1 && newIndex < patients.size()) {
-                                currentPatientIndex = newIndex -1;
-                                currentPatient = patients.get(currentPatientIndex);
+                            newPatientId = Integer.parseInt(scanner.nextLine());
+                            Patient newPatient = null;
+                            for (Patient patient : patients) {
+                                if (patient.getId() == newPatientId) {
+                                    newPatient = patient;
+                                    break;
+                                }
+                            }
+                            if (newPatient != null) {
+                                currentPatient = newPatient;
                                 System.out.format("Gewisseld naar patiënt: %s\n", currentPatient.fullName());
                                 break;
                             } else {
-                                if (newIndex != 0) {
-                                    System.out.println("Geen geldig patiënt ID");
-                                }
+                                System.out.println("Geen patiënt gevonden met dit ID.");
                             }
                         } catch (NumberFormatException e) {
-                            System.out.println("Geen geldige invoer. Voer een geldig geheel getal in voor het patiënt-ID.");
+                            System.out.println("Geen geldige invoer. Voer een *geldig* patiënt-ID in.");
                         }
                     }
                 }
