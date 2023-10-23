@@ -1,23 +1,16 @@
 import java.util.*;
-public class Medication {
 
-    private String name;
-    private String dosage;
+class Medication {
+    int medicationId;
+    String medicationName;
 
-    public Medication(String name, String dosage) {
-        this.name = name;
-        this.dosage = dosage;
+    Medication(int medicationId, String medicationName) {
+        this.medicationId = medicationId;
+        this.medicationName = medicationName;
     }
+    void displayMedication() {
+        System.out.format("[%s] %s\n", medicationId, medicationName);
 
-    public String getName() {
-        return name;
-    }
-
-    public String getDosage() {
-        return dosage;
-    }
-
-    public void setDosage(String dosage) {
-        this.dosage = dosage;
     }
 }
+
