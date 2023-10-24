@@ -1,10 +1,9 @@
-import java.util.ArrayList;
+import java.util.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.time.Period;
 import java.util.Scanner;
-import java.util.HashMap;
+
 class Administration {
     static final int Stop = 0;
     static final int Switch_User = 1;
@@ -20,8 +19,6 @@ class Administration {
     static final int ToevoegenMedicatie = 1;
     static final int VerwijderMedicatie = 2;
     static final int BewerkDosering = 3;
-
-
 
     Patient currentPatient;
     User currentUser;
@@ -55,23 +52,6 @@ class Administration {
         }
         return false;
     }
-    Medication chooseMedication() {
-        System.out.println("Beschikbare medicijnen:");
-        medicationList.displayMedications();
-
-        System.out.print("Voer het ID van het medicijn in dat je wilt kiezen: ");
-        int medicationId = Integer.parseInt(scanner.nextLine());
-
-        Medication chosenMedication = medicationList.getMedicationById(medicationId);
-
-        if (chosenMedication != null) {
-            System.out.println("Je hebt het medicijn gekozen: " + chosenMedication.medicationName);
-        } else {
-            System.out.println("Ongeldig medicijn-ID.");
-        }
-
-        return chosenMedication;
-    }
 
     void addUser(User user) {
         users.add(user);
@@ -91,7 +71,13 @@ class Administration {
             System.out.format("[%d] %s, %s\n", patient.id, patient.getSurname(), patient.getFirstName());
         }
     }
-
+    public void viewAssignedMedications() {
+        if (currentPatient != null) {
+            currentPatient.viewAssignedMedications();
+        } else {
+            System.out.println("Geen patiënt geselecteerd.");
+        }
+    }
     void viewDataMenu() {
         System.out.println(" ");
         currentPatient.viewData();
@@ -214,6 +200,9 @@ class Administration {
             }
             case BewerkMedicatie -> {
                 try {
+                    System.out.format("%s\n", "-".repeat(60));
+                    viewAssignedMedications();
+                    System.out.println(" ");
                     System.out.println("1: Voeg medicijn toe");
                     System.out.println("2: Verwijder medicijn");
                     System.out.println("3: Bewerk medicijn dosering");
@@ -233,60 +222,146 @@ class Administration {
                     switch (medicationChoice) {
 
                         case ToevoegenMedicatie -> {
-                            System.out.println("Beschikbare medicijnen:");
-                            medicationList.displayMedications();
-
-                            System.out.print("Kies een medicijn door het ID in te voeren: ");
-                            int chosenMedicationId = Integer.parseInt(scanner.nextLine());
-
-                            Medication chosenMedication = medicationList.getMedicationById(chosenMedicationId);
-
-                            if (chosenMedication != null) {
-                                System.out.println("Je hebt gekozen voor medicijn: " + chosenMedication.medicationName);
+                            List<Medication> availableMedications = medicationList.getMedications();
+                            if (availableMedications.isEmpty()) {
+                                System.out.println("Geen beschikbare medicijnen om toe te voegen.");
                             } else {
-                                System.out.println("Ongeldig medicijn-ID.");
+                                System.out.println("Beschikbare medicijnen:");
+                                for (Medication medication : availableMedications) {
+                                    medication.displayMedication();
+                                }
+                                System.out.print("Voer het ID van het medicijn in dat je wilt toevoegen: ");
+                                int chosenMedicationId = -1;
+                                while (chosenMedicationId == -1) {
+                                    try {
+                                        chosenMedicationId = Integer.parseInt(scanner.nextLine());
+                                        Medication chosenMedication = medicationList.getMedicationById(chosenMedicationId);
+                                        if (chosenMedication != null) {
+                                            System.out.print("Voer de dosering in (bijv. 5.0 mg): ");
+                                            String dosageInput = scanner.nextLine();
+                                            try {
+                                                double dosage = Double.parseDouble(dosageInput);
+                                                currentPatient.assignMedication(chosenMedication, dosage);
+                                                System.out.println("Medicijn toegevoegd aan de patiënt.");
+                                            } catch (NumberFormatException e) {
+                                                System.out.println("Ongeldige dosering. Voer een geldige dosering in.");
+                                            }
+                                        } else {
+                                            System.out.println("Ongeldige medicatie. Voer een geldig ID in.");
+                                        }
+                                    } catch (NumberFormatException e) {
+                                        System.out.println("Ongeldige invoer. Voer een geldig ID in.");
+                                        System.out.print("Voer het ID van het medicijn in dat je wilt toevoegen: ");
+                                    }
+                                }
                             }
+
                             viewDataMenu();
                         }
 
                         case VerwijderMedicatie -> {
-                            Medication chosenMedication = chooseMedication();
-                            medicationList.removeMedication(chosenMedication.medicationId);
-                            System.out.println("Medicijn verwijderd: " + chosenMedication.medicationName);
+                            Map<Medication, Double> assignedMedications = currentPatient.getAssignedMedications();
+
+                            if (assignedMedications.isEmpty()) {
+                                System.out.println("Geen toegewezen medicatie aan huidige patiënt.");
+                            } else {
+                                System.out.println("Kies medicatie om te verwijderen:");
+
+                                int index = 1;
+                                for (Map.Entry<Medication, Double> entry : assignedMedications.entrySet()) {
+                                    Medication medication = entry.getKey();
+                                    Double dosage = entry.getValue();
+
+                                    System.out.println("[" + index + "] " + medication.medicationName + " - Dosering: " + dosage + " mg");
+                                    index++;
+                                }
+
+                                System.out.print("Voer het nummer in van de medicatie die je wilt verwijderen: ");
+
+                                int choice = -1;
+                                while (choice == -1) {
+                                    try {
+                                        choice = Integer.parseInt(scanner.nextLine());
+                                        if (choice >= 1 && choice <= assignedMedications.size()) {
+                                            Medication[] medications = assignedMedications.keySet().toArray(new Medication[0]);
+                                            Medication medicationToRemove = medications[choice - 1];
+                                            assignedMedications.remove(medicationToRemove);
+                                            System.out.println("Medicatie verwijderd.");
+                                        } else {
+                                            System.out.println("Ongeldige keuze. Voer een geldig nummer in.");
+                                            System.out.print("Voer het nummer in van de medicatie die je wilt verwijderen: ");
+                                            choice = -1;
+                                        }
+                                    } catch (NumberFormatException e) {
+                                        System.out.println("Ongeldige invoer. Voer een geldig nummer in.");
+                                        System.out.print("Voer het nummer in van de medicatie die je wilt verwijderen: ");
+                                    }
+                                }
+                            }
                             viewDataMenu();
                         }
 
                         case BewerkDosering -> {
-                            System.out.println("Beschikbare medicijnen:");
-                            medicationList.displayMedications();
+                            Map<Medication, Double> assignedMedications = currentPatient.getAssignedMedications();
 
-                            System.out.print("Kies een medicijn door het ID in te voeren: ");
-                            int chosenMedicationId = Integer.parseInt(scanner.nextLine());
-
-                            Medication chosenMedication = medicationList.getMedicationById(chosenMedicationId);
-
-                            if (chosenMedication != null) {
-                                System.out.println("Je hebt gekozen voor medicijn: " + chosenMedication.medicationName);
-                                System.out.println("Beschikbare doseringen:");
-                                medicationList.displayDosages(chosenMedicationId);
-
-                                System.out.print("Kies een dosering door het ID in te voeren: ");
-                                int chosenDosageId = Integer.parseInt(scanner.nextLine());
-
-                                Dosage chosenDosage = medicationList.getDosageById(chosenDosageId);
-
-                                if (chosenDosage != null) {
-                                    System.out.println("Je hebt gekozen voor dosering: " + chosenDosage.dosageAmount + " gram");
-                                } else {
-                                    System.out.println("Ongeldig dosering-ID.");
-                                }
+                            if (assignedMedications.isEmpty()) {
+                                System.out.println("Geen toegewezen medicatie aan huidige patiënt.");
                             } else {
-                                System.out.println("Ongeldig medicijn-ID.");
+                                System.out.println("Kies medicatie om de dosering te bewerken:");
+
+                                int index = 1;
+                                for (Map.Entry<Medication, Double> entry : assignedMedications.entrySet()) {
+                                    Medication medication = entry.getKey();
+                                    Double dosage = entry.getValue();
+
+                                    System.out.println("[" + index + "] " + medication.medicationName + " - Dosering: " + dosage + " mg");
+                                    index++;
+                                }
+                                System.out.print("Voer het nummer in van de medicatie waarvan je de dosering wilt bewerken: ");
+
+                                int choice = -1;
+                                while (choice == -1) {
+                                    try {
+                                        choice = Integer.parseInt(scanner.nextLine());
+                                        if (choice >= 1 && choice <= assignedMedications.size()) {
+                                            Medication[] medications = assignedMedications.keySet().toArray(new Medication[0]);
+                                            Medication medicationToEdit = medications[choice - 1];
+
+                                            System.out.print("Voer de nieuwe dosering in voor " + medicationToEdit.medicationName + ": ");
+
+                                            double newDosage = -1;
+                                            while (newDosage == -1) {
+                                                try {
+                                                    newDosage = Double.parseDouble(scanner.nextLine());
+                                                    if (newDosage > 0) {
+                                                        assignedMedications.put(medicationToEdit, newDosage);
+                                                        System.out.println("Dosering bewerkt.");
+                                                    } else {
+                                                        System.out.println("Ongeldige dosering. Voer een positief getal in.");
+                                                        System.out.print("Voer de nieuwe dosering in voor " + medicationToEdit.medicationName + ": ");
+                                                        newDosage = -1;
+                                                    }
+                                                } catch (NumberFormatException e) {
+                                                    System.out.println("Ongeldige invoer. Voer een geldig getal in.");
+                                                    System.out.print("Voer de nieuwe dosering in voor " + medicationToEdit.medicationName + ": ");
+                                                }
+                                            }
+                                        } else {
+                                            System.out.println("Ongeldige keuze. Voer een geldig nummer in.");
+                                            System.out.print("Voer het nummer in van de medicatie waarvan je de dosering wilt bewerken: ");
+                                            choice = -1;
+                                        }
+                                    } catch (NumberFormatException e) {
+                                        System.out.println("Ongeldige invoer. Voer een geldig nummer in.");
+                                        System.out.print("Voer het nummer in van de medicatie waarvan je de dosering wilt bewerken: ");
+                                    }
+                                }
                             }
                             viewDataMenu();
                         }
+                        case Stop -> System.out.println("Terug naar hoofdmenu.");
+                        default -> System.out.println("Ongeldige keuze.");
                     }
-
                 } catch (Exception e) {
                     System.out.println("Er is een fout opgetreden bij het bewerken van medicijnen: " + e.getMessage());
                 }

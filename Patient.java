@@ -73,13 +73,33 @@ class Patient {
         System.out.format("%-17s %s\n", "Achternaam:", surname);
         System.out.format("%-17s %s\n", "Geboortedatum:", dateOfBirth.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         System.out.format("%-17s %d    jaar\n", "Leeftijd:", calculateAge(dateOfBirth));
-        System.out.format("%-17s %.2f  m\n", "Lengte:", height);
-        System.out.format("%-17s %.2f kg\n", "Gewicht:", weight);
-        System.out.format("%-17s %.2f kg/m2\n", "BMI:", calculateBMI());
-
-
+        System.out.format("%-17s %.1f  m\n", "Lengte:", height);
+        System.out.format("%-17s %.1f kg\n", "Gewicht:", weight);
+        System.out.format("%-17s %.1f kg/m2\n", "BMI:", calculateBMI());
+        System.out.println(" ");
+        viewAssignedMedications();
     }
 
+    private Map<Medication, Double> assignedMedications = new HashMap<>();
+
+    public void assignMedication(Medication medication, double dosage) {
+        assignedMedications.put(medication, dosage);
+    }
+    public void viewAssignedMedications() {
+        if (assignedMedications.isEmpty()) {
+            System.out.println(CYAN_TEXT + "Geen medicatie toegewezen aan de patiënt." + RESET);
+        } else {
+            System.out.println(CYAN_TEXT + "Toegewezen medicatie en doseringen:" + RESET);
+            for (Map.Entry<Medication, Double> entry : assignedMedications.entrySet()) {
+                Medication medication = entry.getKey();
+                double dosage = entry.getValue();
+                System.out.format("Medicatie: %s, Dosering: %.1f mg\n", medication.getMedicationName(), dosage);
+            }
+        }
+    }
+    public Map<Medication, Double> getAssignedMedications() {
+        return assignedMedications;
+    }
     String fullName() {
         return String.format("%s %s", firstName, surname);
     }

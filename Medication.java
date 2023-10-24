@@ -1,16 +1,21 @@
-import java.util.*;
-
 class Medication {
-    int medicationId;
-    String medicationName;
+    public int medicationId;
+    public String medicationName;
 
-    Medication(int medicationId, String medicationName) {
+    public Medication(int medicationId, String medicationName) {
         this.medicationId = medicationId;
         this.medicationName = medicationName;
     }
     void displayMedication() {
-        System.out.format("[%s] %s\n", medicationId, medicationName);
-
+        System.out.format("[%d] %s\n", medicationId, medicationName);
     }
-}
 
+    public int getMedicationId() {
+        return medicationId;
+    }
+
+    public String getMedicationName() {
+        return medicationName;
+    }
+
+}
