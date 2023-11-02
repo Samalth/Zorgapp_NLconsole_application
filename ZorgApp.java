@@ -5,23 +5,19 @@ class ZorgApp {
         String RESET = "\u001B[0m";
         String GREEN_TEXT = "\u001B[32m";
         String YELLOW_TEXT = "\u001B[33m";
-        String BLUE_TEXT = "\u001B[34m";
-        String PURPLE_TEXT = "\u001B[35m";
 
         System.out.println(" ");
         System.out.format("%s\n", "=".repeat(60));
         System.out.println(" ");
         System.out.println(GREEN_TEXT + "Welkom" + RESET);
         System.out.println(" ");
-        User user = new User(7, "Dokter-Chirurg","Melvin van de Tak");
+        User user = new User(5, "Apotheker","Stan de Water");
         Administration administration = new Administration(user);
 
         administration.addUser(new User(1,"Fysiotherapeut", "Willem Rijker"));
         administration.addUser(new User(2,"Huisarts", "Bob Metselaar"));
         administration.addUser(new User(3,"Tandarts","Joop de Hut"));
         administration.addUser(new User(5,"Apotheker","Stan de Water"));
-        administration.addUser(new User(7,"Dokter-Chirurg","Melvin van de Tak"));
-        administration.addUser(new User(99,"SB","Systeem Beheer"));
 
         administration.listUsers();
 

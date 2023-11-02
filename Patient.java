@@ -66,9 +66,6 @@ class Patient {
     public void setLungCapacity(double longCapaciteit) {
         this.lungCapacity = longCapaciteit;
     }
-    public double getLongCapacitity() {
-        return lungCapacity;
-    }
 
     void viewData() {
         System.out.format("===== Patiënt id=%d ==============================\n", id);
@@ -90,9 +87,9 @@ class Patient {
         System.out.format("%-17s %s\n", "Geboortedatum:", dateOfBirth.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         System.out.format("%-17s %d    jaar\n", "Leeftijd:", calculateAge(dateOfBirth));
         System.out.format("%-17s %.2f  m\n", "Lengte:", height);
-        System.out.format("%-17s %.1f kg\n", "Gewicht:", weight);
-        System.out.format("%-17s %.1f kg/m2\n", "BMI:", calculateBMI());
-        System.out.format("%-17s %.2f ml\n", "Longcapaciteit", lungCapacity);
+        System.out.format("%-17s %.1f  kg\n", "Gewicht:", weight);
+        System.out.format("%-17s %.1f  kg/m2\n", "BMI:", calculateBMI());
+        System.out.format("%-17s %.2f  ml\n", "Longcapaciteit", lungCapacity);
         System.out.println(" ");
     }
 

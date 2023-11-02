@@ -8,6 +8,7 @@ class Administration {
     static final int Switch_User = 1;
     static final int Switch_Patient = 2;
     static final int VIEW = 3;
+    static final int BekijkConsulten = 4;
     static final int BewerkPatiëntGegevens = 1;
     static final int BewerkVoornaam = 1;
     static final int BewerkAchternaam = 2;
@@ -23,10 +24,12 @@ class Administration {
     User currentUser;
     String RESET = "\u001B[0m";
     String RED_TEXT = "\u001B[31m";
+    String CYAN_TEXT = "\u001B[36m";
+
     ArrayList<Patient> patients = new ArrayList<>();
     ArrayList<User> users = new ArrayList<>();
 
-    int currentPatientIndex = 3;
+    int currentPatientIndex = 2;
     Scanner scanner = new Scanner(System.in);
 
     Administration(User user) {
@@ -75,6 +78,62 @@ class Administration {
         }
     }
 
+    void printMainMenu(){
+        String userRole = currentUser.getUserRole();
+        System.out.format("%s\n", "=".repeat(80));
+        if (userRole.equals("Huisarts")) {
+            System.out.println(CYAN_TEXT + "Afspraken:" + RESET);
+            System.out.println(CYAN_TEXT + "[12:30] Zeukel, Mohammed *Rugklachten*" + RESET);
+        }
+        System.out.println(" ");
+        System.out.println("===============");
+        System.out.println("===HOOFDMENU===");
+        System.out.println("===============");
+        System.out.println(" ");
+        System.out.format("Huidige gebruiker: [%d] %s %s\n", currentUser.getUserID(), currentUser.getUserRole(), currentUser.getUserName());
+        System.out.println(" ");
+        System.out.format("Huidige patiënt: %s [%s]\n", currentPatient.fullName(), currentPatient.getDateOfBirth().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+
+        System.out.format("%d:  Stop\n", Stop);
+        System.out.format("%d:  Wissel naar een andere gebruiker\n", Switch_User);
+        System.out.format("%d:  Wissel naar een andere patiënt\n", Switch_Patient);
+        System.out.format("%d:  Bekijk/bewerk gegevens van huidige patiënt\n", VIEW);
+        System.out.format("%d:  Bekijk consulten/tarieven\n", BekijkConsulten);
+
+        System.out.print("Maak een keuze: ");
+    }
+
+    void printSubMenu(){
+        System.out.println("=================================================");
+        System.out.println(" ");
+        System.out.println("===============");
+        System.out.println("====SUBMENU====");
+        System.out.println("===============");
+        System.out.println(" ");
+
+        System.out.println("Bewerk patiëntgegevens:");
+        System.out.println("1:  Bewerk voornaam");
+        System.out.println("2:  Bewerk achternaam");
+        System.out.println("3:  Bewerk geboortedatum");
+        System.out.println("4:  Bewerk lengte");
+        System.out.println("5:  Bewerk gewicht");
+        System.out.println("6:  Bewerk longcapaciteit");
+        System.out.println("7:  Bewerk Medicatie");
+        System.out.println("0:  Terug naar hoofdmenu");
+
+        System.out.print("Maak een keuze: ");
+    }
+    void printMedicationMenu(){
+        System.out.format("%s\n", "-".repeat(60));
+        viewAssignedMedications();
+        System.out.println(" ");
+        System.out.println("1: Voeg medicijn toe");
+        System.out.println("2: Verwijder medicijn");
+        System.out.println("3: Bewerk medicijn dosering");
+        System.out.println("0: Terug naar hoofdmenu");
+        System.out.print("Maak een keuze: ");
+    }
+
     public void viewAssignedMedications() {
         if (currentPatient != null) {
             currentPatient.viewAssignedMedications();
@@ -120,25 +179,7 @@ class Administration {
     }
 
     void editData() {
-        System.out.println("=================================================");
-        System.out.println(" ");
-        System.out.println("===============");
-        System.out.println("====SUBMENU====");
-        System.out.println("===============");
-        System.out.println(" ");
-
-        System.out.println("Bewerk patiëntgegevens:");
-        System.out.println("1:  Bewerk voornaam");
-        System.out.println("2:  Bewerk achternaam");
-        System.out.println("3:  Bewerk geboortedatum");
-        System.out.println("4:  Bewerk lengte");
-        System.out.println("5:  Bewerk gewicht");
-        System.out.println("6:  Bewerk longcapaciteit");
-        System.out.println("7:  Bewerk Medicatie");
-        System.out.println("0:  Terug naar hoofdmenu");
-
-        System.out.print("Maak een keuze: ");
-
+        printSubMenu();
         int editChoice;
         while (true) {
             try {
@@ -184,37 +225,48 @@ class Administration {
             }
 
             case BewerkLengte -> {
-                System.out.print("Voer de nieuwe lengte in (bijv. 1.75): ");
-                String heightInput = scanner.nextLine();
-                heightInput = heightInput.replace(",", ".");
-                double newHeight;
-                try {
-                    newHeight = Double.parseDouble(heightInput);
-                    currentPatient.setHeight(newHeight);
-                    System.out.println("Lengte bijgewerkt naar: " + newHeight);
+                String userRole = currentUser.getUserRole();
+                if (userRole.equals("Fysiotherapeut")) {
+                    System.out.println(RED_TEXT + "Geen juiste rechten om deze actie uit te voeren." + RESET);
                     viewDataMenu();
-                } catch (NumberFormatException e) {
-                    System.out.println("Ongeldige lengte. Voer een geldig getal in (bijv. 1.75).");
+                    System.out.print("Voer de nieuwe lengte in (bijv. 1.75): ");
+                    String heightInput = scanner.nextLine();
+                    heightInput = heightInput.replace(",", ".");
+                    double newHeight;
+                    try {
+                        newHeight = Double.parseDouble(heightInput);
+                        currentPatient.setHeight(newHeight);
+                        System.out.println("Lengte bijgewerkt naar: " + newHeight);
+                        viewDataMenu();
+                    } catch (NumberFormatException e) {
+                        System.out.println("Ongeldige lengte. Voer een geldig getal in (bijv. 1.75).");
+                    }
+                    viewDataMenu();
                 }
-                viewDataMenu();
             }
 
             case BewerkGewicht -> {
-                System.out.print("Voer het nieuwe gewicht in (bijv. 75.0): ");
-                double newWeight;
-                try {
-                    newWeight = Double.parseDouble(scanner.nextLine());
-                    currentPatient.setWeight(newWeight);
-                    System.out.println("Gewicht bijgewerkt naar: " + newWeight);
+                String userRole = currentUser.getUserRole();
+                if (userRole.equals("Fysiotherapeut")) {
+                    System.out.println(RED_TEXT + "Geen juiste rechten om deze actie uit te voeren." + RESET);
                     viewDataMenu();
-                } catch (NumberFormatException e) {
-                    System.out.println("Ongeldig gewicht. Voer een geldig getal in (bijv. 75.0).");
+                    System.out.print("Voer het nieuwe gewicht in (bijv. 75.0): ");
+                    double newWeight;
+                    try {
+                        newWeight = Double.parseDouble(scanner.nextLine());
+                        currentPatient.setWeight(newWeight);
+                        System.out.println("Gewicht bijgewerkt naar: " + newWeight);
+                        viewDataMenu();
+                    } catch (NumberFormatException e) {
+                        System.out.println("Ongeldig gewicht. Voer een geldig getal in (bijv. 75.0).");
+                    }
+                    viewDataMenu();
                 }
-                viewDataMenu();
             }
+
             case BewerkLongCapaciteit -> {
                 String userRole = currentUser.getUserRole();
-                if (userRole.equals("Fysiotherapeut")  || (userRole.equals("SB"))) {
+                if (userRole.equals("Fysiotherapeut")) {
                     System.out.print("Voer de nieuwe longcapaciteit in (bijv. 5555.5 ml): ");
                     String longCapaciteitInput = scanner.nextLine();
                     try {
@@ -238,15 +290,7 @@ class Administration {
                     viewDataMenu();
                 } else {
                     try {
-                        System.out.format("%s\n", "-".repeat(60));
-                        viewAssignedMedications();
-                        System.out.println(" ");
-                        System.out.println("1: Voeg medicijn toe");
-                        System.out.println("2: Verwijder medicijn");
-                        System.out.println("3: Bewerk medicijn dosering");
-                        System.out.println("0: Terug naar hoofdmenu");
-                        System.out.print("Maak een keuze: ");
-
+                    printMedicationMenu();
                         int medicationChoice;
                         while (true) {
                             try {
@@ -412,22 +456,7 @@ class Administration {
         var scanner = new Scanner(System.in);
         boolean nextCycle = true;
         while (nextCycle) {
-            System.out.format("%s\n", "=".repeat(80));
-            System.out.println(" ");
-            System.out.println("===============");
-            System.out.println("===HOOFDMENU===");
-            System.out.println("===============");
-            System.out.println(" ");
-            System.out.format("Huidige gebruiker: [%d] %s %s\n", currentUser.getUserID(), currentUser.getUserRole(), currentUser.getUserName());
-            System.out.println(" ");
-            System.out.format("Huidige patiënt: %s [%s]\n", currentPatient.fullName(), currentPatient.getDateOfBirth().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
-
-            System.out.format("%d:  Stop\n", Stop);
-            System.out.format("%d:  Wissel naar een andere gebruiker\n", Switch_User);
-            System.out.format("%d:  Wissel naar een andere patiënt\n", Switch_Patient);
-            System.out.format("%d:  Bekijk/bewerk gegevens van huidige patiënt\n", VIEW);
-
-            System.out.print("Maak een keuze: ");
+            printMainMenu();
 
             int choice;
             while (true) {
@@ -498,6 +527,31 @@ class Administration {
                     }
                 }
                 case VIEW -> viewDataMenu();
+
+                case BekijkConsulten -> {
+                    System.out.println(" ");
+                    System.out.println(CYAN_TEXT + "Tarieven" + RESET);
+                    String userRole = currentUser.getUserRole();
+                    if (userRole.equals("Fysiotherapeut")) {
+                        System.out.println("Normale behandeling:     €17.50 ");
+                        System.out.println("Korte behandeling:       €22.50 ");
+                        System.out.println("Uitgebreide behandeling: €45.00 ");
+                        System.out.println("Faciliteiten:            €5.00  ");
+                    } else {
+                        if (userRole.equals("Huisarts")) {
+                            System.out.println("Normale behandeling:     €21.50 ");
+                            System.out.println("Uitgebreide behandeling: €43.00 ");
+                        } else {
+                            if (userRole.equals("Tandarts")) {
+                                System.out.println("Normale behandeling:     €20.00 ");
+                                System.out.println("Korte behandeling:       €30.00 ");
+                                System.out.println("Uitgebreide behandeling: €55.00 ");
+                            } else {
+                                System.out.println("Geen tarieven bekend");
+                            }
+                        }
+                    }
+                }
                 default -> System.out.println("Voer alstublieft een *geldig* getal in");
             }
         }

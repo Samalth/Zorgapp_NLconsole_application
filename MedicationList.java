@@ -1,6 +1,6 @@
 import java.util.*;
 
-class MedicationList {
+class MedicationList extends Medication{
     public Medication getMedicationById(int medicationId) {
         for (Medication medication : medications) {
             if (medication.medicationId == medicationId) {
@@ -11,16 +11,15 @@ class MedicationList {
     }
     private List<Medication> medications = new ArrayList<>();
     private Map<Integer, List<Double>> medicationDosages = new HashMap<>();
-    private int dosageIdCounter = 1;
 
     public MedicationList() {
-        addMedication(new Medication(1, "Paracetamol"));
-        addMedication(new Medication(2, "Cadexomeerjodium"));
-        addMedication(new Medication(3, "Fexofenadine"));
-        addMedication(new Medication(4, "Lidocaine"));
-        addMedication(new Medication(5, "Tripelennamine hydrochloride"));
-        addMedication(new Medication(6, "Ranitidine hydrochloride"));
-        addMedication(new Medication(7, "Cholesterol"));
+        addMedication(new Medication(1, "Paracetamol", "tablet"));
+        addMedication(new Medication(2, "Cadexomeerjodium", "tablet, max 16g"));
+        addMedication(new Medication(3, "Fexofenadine", "tablet, max 180mg"));
+        addMedication(new Medication(4, "Lidocaine", "tablet, max 6g"));
+        addMedication(new Medication(5, "Tripelennamine hydrochloride", "tablet, max 5ug"));
+        addMedication(new Medication(6, "Ranitidine hydrochloride", "tablet, max 15ug"));
+        addMedication(new Medication(7, "Cholesterol", "tablet, max 5mg"));
 
         addDosage(1, 5.0);
         addDosage(1, 10.0);
@@ -34,14 +33,6 @@ class MedicationList {
 
     public void addMedication(Medication medication) {
         medications.add(medication);
-    }
-
-    void displayAvailableMedications() {
-        System.out.println("Beschikbare medicijnen:");
-        List<Medication> medications = getMedications();
-        for (Medication medication : medications) {
-            System.out.format("[%d] %s\n", medication.medicationId, medication.medicationName);
-        }
     }
 
     public void addDosage(int medicationId, double dosageAmount) {
