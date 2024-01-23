@@ -77,13 +77,24 @@ class Administration {
             System.out.format("[%d] %s, %s\n", patient.id, patient.getSurname(), patient.getFirstName());
         }
     }
+    String randomTime() {
+        Random random = new Random();
+        Patient randomPatient = patients.get(random.nextInt(patients.size())); // Kies een willekeurige patiënt
+        int hours = random.nextInt(24);
+        int[] validMinutes = {0, 15, 30, 45};
+        int minutes = validMinutes[random.nextInt(validMinutes.length)];
+
+        String formattedTime = String.format("[%02d:%02d]", hours, minutes);
+        return formattedTime + " " + randomPatient.getFullName() + " *Rugklachten*";
+    }
 
     void printMainMenu(){
+
         String userRole = currentUser.getUserRole();
         System.out.format("%s\n", "=".repeat(80));
         if (userRole.equals("Huisarts")) {
             System.out.println(CYAN_TEXT + "Afspraken:" + RESET);
-            System.out.println(CYAN_TEXT + "[12:30] Zeukel, Mohammed *Rugklachten*" + RESET);
+            System.out.format("%s \n", CYAN_TEXT + randomTime() + RESET);
         }
         System.out.println(" ");
         System.out.println("===============");
@@ -226,9 +237,10 @@ class Administration {
 
             case BewerkLengte -> {
                 String userRole = currentUser.getUserRole();
-                if (userRole.equals("Fysiotherapeut")) {
+                if (userRole.equals("Tandarts") || userRole.equals("Apotheker")) {
                     System.out.println(RED_TEXT + "Geen juiste rechten om deze actie uit te voeren." + RESET);
                     viewDataMenu();
+                } else {
                     System.out.print("Voer de nieuwe lengte in (bijv. 1.75): ");
                     String heightInput = scanner.nextLine();
                     heightInput = heightInput.replace(",", ".");
@@ -245,11 +257,13 @@ class Administration {
                 }
             }
 
+
             case BewerkGewicht -> {
                 String userRole = currentUser.getUserRole();
-                if (userRole.equals("Fysiotherapeut")) {
+                if (userRole.equals("Tandarts") || userRole.equals("Apotheker")) {
                     System.out.println(RED_TEXT + "Geen juiste rechten om deze actie uit te voeren." + RESET);
                     viewDataMenu();
+                } else {
                     System.out.print("Voer het nieuwe gewicht in (bijv. 75.0): ");
                     double newWeight;
                     try {
@@ -285,7 +299,7 @@ class Administration {
 
             case BewerkMedicatie -> {
                 String userRole = currentUser.getUserRole();
-                if (userRole.equals("Fysiotherapeut") || (userRole.equals("Tandarts"))) {
+              if (userRole.equals("Fysiotherapeut") || userRole.equals("Apotheker")) {
                     System.out.println(RED_TEXT + "Geen juiste rechten om deze actie uit te voeren." + RESET);
                     viewDataMenu();
                 } else {
@@ -342,7 +356,6 @@ class Administration {
 
                             case VerwijderMedicatie -> {
                                 Map<Medication, Double> assignedMedications = currentPatient.getAssignedMedications();
-
                                 if (assignedMedications.isEmpty()) {
                                     System.out.println("Geen toegewezen medicatie aan huidige patiënt.");
                                 } else {

@@ -28,9 +28,9 @@ class Patient {
     public void setWeight(double length) {
         this.weight = length;
     }
-    double height;
-    double weight;
-    double calculateBMI() {
+    private double height;
+    private double weight;
+    private double calculateBMI() {
         if (height <= 0 || weight <= 0) {
             return 0.0;
         }
@@ -66,6 +66,9 @@ class Patient {
     public void setLungCapacity(double longCapaciteit) {
         this.lungCapacity = longCapaciteit;
     }
+    public String getFullName(){
+        return fullName();
+    }
 
     void viewData() {
         System.out.format("===== Patiënt id=%d ==============================\n", id);
@@ -89,7 +92,7 @@ class Patient {
         System.out.format("%-17s %.2f  m\n", "Lengte:", height);
         System.out.format("%-17s %.1f  kg\n", "Gewicht:", weight);
         System.out.format("%-17s %.1f  kg/m2\n", "BMI:", calculateBMI());
-        System.out.format("%-17s %.2f  ml\n", "Longcapaciteit", lungCapacity);
+        System.out.format("%-17s %.1f  ml\n", "Longcapaciteit", lungCapacity);
         System.out.println(" ");
     }
 
@@ -99,6 +102,8 @@ class Patient {
         System.out.format("%-17s %s\n", "Achternaam:", surname);
         System.out.format("%-17s %s\n", "Geboortedatum:", dateOfBirth.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         System.out.format("%-17s %d    jaar\n", "Leeftijd:", calculateAge(dateOfBirth));
+        System.out.println(" ");
+        viewAssignedMedications();
     }
 
     private Map<Medication, Double> assignedMedications = new HashMap<>();
