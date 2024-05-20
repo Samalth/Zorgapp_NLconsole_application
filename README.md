@@ -1,5 +1,12 @@
 # Zorgapplicatie
 
+
+### Techstack
+- Java 
+- JavaFX
+- CSS
+
+
 This application is Dutch so the readme will continue in this language.
 
 NL
